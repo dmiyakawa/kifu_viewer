@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,user-scalable=0">
+    <link rel="stylesheet" href="Kifu-for-JS/css/kifuforjs.css">
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
+    <h1>棋譜ビューア</h1>
+    <div id="notification"></div>
+    <div id="source-input">
+      <div>
+        <h1>Local File</h1>
+        <div>
+          <input id="files" type="file" name="file">
+        </div>
+      </div>
+      <div>
+        <h1>kifu id</h1>
+        <input id="ext-source" type="text" name="text">
+        <button id="download" type="button"
+                name="download" value="download">
+          Download
+        </button>
+      </div>
+    </div>
+    <div id="viewer" hidden>
+      <!-- 棋譜が実際に表示される -->
+      <div id="board"></div>
+      <div>
+        <input id="meta-title" type="text">
+        <input id="meta-kifu" type="hidden">
+        <button id="save" type="button">
+          Save
+        </button>
+      </div>
+      <div>
+        <button id="back" type="button">
+          Back
+        </button>
+      </div>
+    </div>
+    <div id="admin" style="margin-top: 20px;">
+      <button id="clear" type="button">
+        Clear Storage
+      </button>
+    </div>
+
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script src="Kifu-for-JS/out/kifuforjs.js" charset="utf-8"></script>
+    <script src="js/meta.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
