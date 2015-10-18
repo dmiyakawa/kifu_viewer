@@ -25,14 +25,19 @@
           Download
         </button>
       </div>
+      <div>
+        <h1>Saved Kifus</h1>
+        <div id="saved-kifus"></div>
+      </div>
     </div>
     <div id="viewer" hidden>
       <!-- 棋譜が実際に表示される -->
       <div id="board"></div>
-      <div>
+      <div id="save-panel">
+        <input id="kifu-id" type="text">
         <input id="meta-title" type="text">
         <input id="meta-kifu" type="hidden">
-        <button id="save" type="button">
+        <button id="save-button" type="button">
           Save
         </button>
       </div>
@@ -46,6 +51,10 @@
       <button id="clear" type="button">
         Clear Storage
       </button>
+    </div>
+
+    <div>
+      <a href="https://github.com/dmiyakawa/kifu_viewer">kifu_viewer</a>
     </div>
 
     <script src="js/jquery-2.1.4.min.js"></script>

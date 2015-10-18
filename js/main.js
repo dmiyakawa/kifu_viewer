@@ -15,19 +15,24 @@ function showSourceInput() {
     $('#viewer').hide();
 }
 
-function showBoard() {
+function showBoard(able_to_save) {
     $('#viewer').show();
     $('#source-input').hide();
+    if (able_to_save) {
+        $('#save-panel').show();
+    } else {
+        $('#save-panel').hide();
+    }
 }
 
-function initKifuWithString(kifu_string) {
+function initKifuWithString(kifu_string, able_to_save) {
     console.log("initKifuWithString()");
     Kifu.settings={ImageDirectoryPath: "Kifu-for-JS/images"};
     $('#board').empty();
     Kifu.loadString(kifu_string, "board");
     console.log("先手: " + getSenteName());
     console.log("後手: " + getGoteName());
-    showBoard();
+    showBoard(able_to_save);
 }
 
 function getEncodingFromFileName(filename){
@@ -41,7 +46,7 @@ function handleFileSelect(evt) {
     var reader = new FileReader();
     var encoding = getEncodingFromFileName(file.name);
     reader.onload = function(){
-        initKifuWithString(reader.result);
+        initKifuWithString(reader.result, true);
     };
     reader.readAsText(file, encoding);
 }
@@ -52,10 +57,10 @@ function handleSWars(url) {
         var csa = convertSWarToCsa(html);
         if (csa) {
             console.log(csa);
-            $('#meta-kifu').text(csa);
-            initKifuWithString(csa);
+            $('#meta-kifu').val(csa);
+            initKifuWithString(csa, true);
         } else {
-            showNoticification("Failed to parse SWar HTML");
+            showNotification("Failed to parse SWar HTML");
         }
     });
 }
@@ -152,12 +157,12 @@ function convertSWarToCsa(html) {
 function handleKifuDatabase(url) {
     console.log("using url \"" + url + "\"");
     $.get(url, function(data) {
-        var kifu = $('textarea[name=data]', $.parseHTML(data)).text();
-        if (kifu.trim() == "") {
+        var kifu_text = $('textarea[name=data]', $.parseHTML(data)).text();
+        if (kifu_text.trim() == "") {
             console.log("empty kifu data");
         } else {
-            $('#meta-kifu').text(kifu);
-            initKifuWithString(kifu);
+            $('#meta-kifu').val(kifu_text);
+            initKifuWithString(kifu_text, true);
         }
     });
 }
@@ -179,19 +184,19 @@ function handleDownloadClick(event) {
 
 function handleSaveClick(event) {
     console.log("save clicked");
-    var title = $('#meta-title').text();
-    var kifu = $('#meta-kifu').text();
+    var kifu_title = $('#meta-title').val();
+    var kifu_text = $('#meta-kifu').val();
     var last_kifu_id = parseInt(localStorage.last_kifu_id);
     var next_kifu_id = last_kifu_id + 1;
     localStorage.last_kifu_id = next_kifu_id;
     var kifu_hash = JSON.parse(localStorage.kifu_hash);
-    var hash = {
+    var kifu_info = {
         id: next_kifu_id,
-        title: title,
-        kifu: kifu,
+        title: kifu_title,
+        kifu_text: kifu_text
     };
-    console.log(hash);
-    kifu_hash[next_kifu_id] = hash;
+    console.log(kifu_info);
+    kifu_hash[next_kifu_id] = kifu_info;
     console.log(JSON.stringify(kifu_hash));
     localStorage.kifu_hash = JSON.stringify(kifu_hash);
 }
@@ -218,11 +223,38 @@ function initStorage() {
     }
     console.log("Current last_kifu_id: "
                 + localStorage.last_kifu_id);
-    var kifu_hash = JSON.parse(localStorage.kifu_hash)
+    var kifu_hash = JSON.parse(localStorage.kifu_hash);
     console.log("Current kifu_hash size: "
                 + Object.keys(kifu_hash).length);
     console.log("total localStorage length: "
                 + localStorage.length);
+    var keys = Object.keys(kifu_hash);
+    if (keys.length == 0) {
+        $('#saved-kifus').append("(empty)");
+    } else {
+        var ul_item = $(document.createElement("ul"));
+        for (var i = 0; i < keys.length; i++) {
+            var kifu_info = kifu_hash[keys[i]];
+            console.log(JSON.stringify(kifu_info));
+            var li_item = $(document.createElement("li"));
+            var a_item = $(document.createElement("a"));
+            (function (kifu_info) {
+                console.log("setting " + kifu_info.title);
+                a_item.click(function () {
+                    console.log("Opening \"" + kifu_info.title + "\"");
+                    var kifu_text = kifu_info.kifu_text;
+                    console.log(kifu_text);
+                    // 保存済テキスト
+                    initKifuWithString(kifu_text, false);
+                });
+            })(kifu_info);
+            a_item.attr("href", "#");
+            a_item.text(kifu_info.title);
+            li_item.append(a_item);
+            ul_item.append(li_item);
+        }
+        $('#saved-kifus').append(ul_item);
+    }
 }
 
 function main() {
@@ -233,13 +265,13 @@ function main() {
     document.getElementById('back').addEventListener(
         'click', handleBackClick, false);
     if (typeof localStorage !== 'undefined') {
-        document.getElementById('save').addEventListener(
+        document.getElementById('save-button').addEventListener(
             'click', handleSaveClick, false);
         document.getElementById('clear').addEventListener(
             'click', handleClearClick, false);
         initStorage();
     } else {
-        $('#save').hide();
+        $('#save-panel').hide();
         $('#clear').hide();
     }
 }
