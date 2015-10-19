@@ -10,23 +10,21 @@
     <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
-    <div id="nav">
+    <div id="wrap">
       <div class="container">
         <div class="page-header">
           <h2>棋譜ビューア</h2>
         </div>
         <div id="notification"></div>
         <div id="source-input">
+          
           <div>
-            <h3>Local File</h3>
-            <div>
-              <span class="btn btn-default btn-file">
-                Browse <input id="files" type="file" name="file">
-              </span>
-            </div>
+            <span class="btn btn-default btn-file">
+              ローカルファイル <input id="files" type="file" name="file">
+            </span>
           </div>
           <div>
-            <h2>kifu id</h2>
+            <label>ダウンロード</label>
             <input id="ext-source" type="text" name="text">
             <button id="download" type="button"
                     name="download" value="download" class="btn">
@@ -55,23 +53,21 @@
             </button>
           </div>
         </div>
-        <div id="admin" style="margin-top: 20px;">
+        <div id="admin" style="margin-top: 40px;">
           <button id="clear" type="button" class="btn btn-mini btn-danger">
             Clear Storage
           </button>
         </div>
       </div><!-- /nav/container -->
     </div><!-- /nav -->
-    
-    <div id="footer">
-      <div class="container">
-        <p class="muted credit">
-          <a href="https://github.com/dmiyakawa/kifu_viewer">kifu_viewer</a>
-        </p>
-      </div>
-    </div>
 
-    <script src="js/jquery-2.1.4.min.js"></script>
+    <!-- <script src="js/jquery-2.1.4.min.js"></script> -->
+    <script>
+     window.jQuery = window.$ = require('./js/jquery');
+     if (!window.$) {
+         console.log("Failed to load jquery");
+     }
+    </script>
     <script src="js/bootstrap.min.js"></script>
     <script src="Kifu-for-JS/out/kifuforjs.js" charset="utf-8"></script>
     <script src="js/meta.js"></script>

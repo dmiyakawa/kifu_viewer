@@ -282,7 +282,7 @@ function main() {
     document.getElementById('download').addEventListener(
         'click', handleDownloadClick, false);
     document.getElementById('back').addEventListener(
-        'click', handleBackClick, false);
+            'click', handleBackClick, false);
     if (typeof localStorage !== 'undefined') {
         document.getElementById('save-button').addEventListener(
             'click', handleSaveClick, false);
@@ -294,5 +294,4 @@ function main() {
         $('#clear').hide();
     }
 }
-
 main();
