@@ -4,7 +4,7 @@ var app = require('app');
 var BrowserWindow = require('browser-window');
 
 require('crash-reporter').start();
-
+var ipc = require('ipc');
 var mainWindow = null;
 
 app.on('window-all-closed', function() {
@@ -18,8 +18,11 @@ app.on('ready', function() {
                                     'min-width': 800,
                                     'min-height': 600});
     mainWindow.loadUrl('file://' + __dirname + '/index.html');
-    mainWindow.openDevTools();
     mainWindow.on('closed', function() {
         mainWindow = null;
     });
+});
+
+ipc.on('enter-dev-mode', function() {
+    mainWindow.openDevTools();
 });

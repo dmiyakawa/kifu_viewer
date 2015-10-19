@@ -1,6 +1,7 @@
 'use strict';
 
 var Kifu = require("Kifu");
+var ipc = require("ipc");
 
 function showNotification(message) {
     console.log(message);
@@ -231,6 +232,11 @@ function handleBackClick(event) {
     showSourceInput();
 }
 
+function handleDevClick(event) {
+    console.log("dev clicked");
+    ipc.send("enter-dev-mode");
+}
+
 function initStorage() {
     if (localStorage.last_kifu_id == null) {
         console.log("Initializing last_kifu_id");
@@ -282,7 +288,9 @@ function main() {
     document.getElementById('download').addEventListener(
         'click', handleDownloadClick, false);
     document.getElementById('back').addEventListener(
-            'click', handleBackClick, false);
+        'click', handleBackClick, false);
+    document.getElementById('dev').addEventListener(
+        'click', handleDevClick, false);
     if (typeof localStorage !== 'undefined') {
         document.getElementById('save-button').addEventListener(
             'click', handleSaveClick, false);
