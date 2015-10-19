@@ -13,6 +13,7 @@ function showNotification(message) {
 function showSourceInput() {
     $('#source-input').show();
     $('#viewer').hide();
+    $('#admin').show();
 }
 
 function showBoard(able_to_save) {
@@ -23,6 +24,7 @@ function showBoard(able_to_save) {
     } else {
         $('#save-panel').hide();
     }
+    $('#admin').hide();
 }
 
 function initKifuWithString(kifu_string, able_to_save) {
@@ -46,7 +48,9 @@ function handleFileSelect(evt) {
     var reader = new FileReader();
     var encoding = getEncodingFromFileName(file.name);
     reader.onload = function(){
-        initKifuWithString(reader.result, true);
+        var kifu_text = reader.result;
+        $('#meta-kifu').val(kifu_text);
+        initKifuWithString(kifu_text, true);
     };
     reader.readAsText(file, encoding);
 }
@@ -167,14 +171,29 @@ function handleKifuDatabase(url) {
     });
 }
 
+// http://stackoverflow.com/questions/901115/
+function getParameterByName(uri, name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var queryString = uri.substring(uri.indexOf('?') + 1);
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+    var results = regex.exec(queryString);
+    return results === null ? "" : decodeURIComponent(
+        results[1].replace(/\+/g, " "));
+}
+
 function handleDownloadClick(event) {
     var ext_source = $('#ext-source').val().trim();
+    var url;
     if (/^http:\/\/shogiwars.heroz.jp:3002/.test(ext_source)) {
         handleSWars(ext_source);
-    } else if (/^http:\/\/kifudatabase.no-ip.org/.test(ext_source)) {
-        handleKifuDatabase();
+    } else if (/^http:\/\/kifudatabase.no-ip.org\/shogi/.test(ext_source)) {
+        var kid = getParameterByName(ext_source, 'kid');
+        console.log("kid: " + kid);
+        url = 'http://kifdatabase.no-ip.org/shogi/index.php'
+            + '?cmd=kif&cmds=displaytxt&kid=' + kid;
+        handleKifuDatabase(url);
     } else if (/\d+/.test(ext_source)) {
-        var url = 'http://kifdatabase.no-ip.org/shogi/index.php'
+        url = 'http://kifdatabase.no-ip.org/shogi/index.php'
             + '?cmd=kif&cmds=displaytxt&kid=' + ext_source;
         handleKifuDatabase(url);
     } else {

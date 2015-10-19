@@ -26,7 +26,6 @@ JSがAhoy!
 
 # やる
 
-* せめてBootstrap
 * Reactかなんか使う
 * Babelかなんか使う
 * 保存棋譜呼び出し後の編集モード
